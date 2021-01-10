@@ -1,7 +1,7 @@
 <template>
   <div>
     <home-header @addNewTodo="addNewTodo"></home-header>
-    <home-todo :list="todoList" @finishTodoItem="finishTodoItem"></home-todo>
+    <home-todo :list="todoList" @finishTodoItem="finishTodoItem" @changeTodoItem="changeTodoItem"></home-todo>
     <home-done :list="doneList" @deleteDoneItem="deleteDoneItem"></home-done>
   </div>
 </template>
@@ -34,6 +34,9 @@ export default {
         content: item
       }
       this.todoList.push(newTodo)
+    },
+    changeTodoItem (changeContent, index) {
+      this.$set(this.todoList[index], 'content', changeContent)
     },
     finishTodoItem (index) {
       this.doneList.push(this.todoList[index])

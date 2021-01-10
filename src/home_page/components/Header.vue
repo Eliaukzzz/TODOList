@@ -14,8 +14,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * 输入新日程后按下回车时
+     * 如果新日程为空，不做处理
+     * 如果新日程不为空，添加新日程
+     */
     handleEnterDown () {
+      if (this.newContent === '') {
+        return
+      }
       this.$emit('addNewTodo', this.newContent)
+      this.newContent = ''
     }
   }
 }

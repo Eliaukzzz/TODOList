@@ -23,6 +23,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 点击已完成的内容时，传递该内容的索引
+     */
     handleDoneDelete (index) {
       this.$emit('deleteDoneItem', index)
     }

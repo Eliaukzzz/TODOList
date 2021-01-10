@@ -5,10 +5,9 @@
     </h1>
 
     <ul class="todo-list">
-      <li class="todo-list-content" v-for="(item,index) of todoList" :key="item.id">
+      <li class="todo-list-content" v-for="(item,index) of list" :key="item.id" draggable="true">
         <input type="checkbox" class="finish" @click="handleCheckboxChecked(index)">
-        <input v-if="show" v-model="item.content">
-        <p @click="handleTodoClick(item.content, index)">{{item.content}}</p>
+        <input v-model="item.content" @keydown.enter="handleInputEnter($event,item.content,index)" @blur="handleInputBlur(item.content,index)">
       </li>
     </ul>
   </div>
@@ -20,23 +19,37 @@ export default {
   props: {
     list: Array
   },
-  data () {
-    return {
-      todoList: this.list,
-      show: false
-    }
-  },
   computed: {
     todoNumber () {
       return this.list.length
     }
   },
   methods: {
+    /**
+     * 点击checkbox时
+     * 发布finishTodoItem事件，
+     * 传递当前点击的元素索引
+     */
     handleCheckboxChecked (index) {
       this.$emit('finishTodoItem', index)
     },
-    handleTodoClick (changedTodo, index) {
-      // 待实现
+    /**
+     * 修改input中的内容后点击回车时，
+     * input失去焦点，
+     * 发布changeTodoItem事件，
+     * 传递改变后的内容和其索引
+     */
+    handleInputEnter (event, changeContent, index) {
+      event.currentTarget.blur()
+      this.$emit('changeTodoItem', changeContent, index)
+    },
+    /**
+     * 修改input中的内容后失去焦点时，
+     * 发布changeTodoItem事件，
+     * 传递改变后的内容和其索引
+     */
+    handleInputBlur (changeContent, index) {
+      this.$emit('changeTodoItem', changeContent, index)
     }
   }
 }
@@ -55,7 +68,7 @@ export default {
       margin-right 2rem
       span
         font-size .22rem
-        color #0DAA00
+        color #0c8918
     .todo-list
       font-size .2rem
       .todo-list-content
@@ -70,18 +83,12 @@ export default {
           height .18rem
           width .18rem
         input
-          position absolute
-          top -.01rem
-          width 80%
-          height 100%
-          color #ccc
-          font-size .2rem
-          line-height 100%
-          margin-left .2rem
-        p
           display inline-block
+          font-size .2rem
           width 80%
-          line-height 100%
-          margin-left .2rem
+          margin-left .1rem
           color #757575
+          &:focus
+            color #1bd1a5
+            font-style italic
 </style>
